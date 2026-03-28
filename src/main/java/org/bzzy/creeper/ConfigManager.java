@@ -25,6 +25,7 @@ public final class ConfigManager {
     public static void load() {
         try {
             if (Files.notExists(CONFIG_PATH)) {
+                config = new ModConfig();
                 save();
                 return;
             }
@@ -32,12 +33,23 @@ public final class ConfigManager {
             String json = Files.readString(CONFIG_PATH, StandardCharsets.UTF_8);
             ModConfig loaded = GSON.fromJson(json, ModConfig.class);
 
+            // 创建默认配置作为基础
+            ModConfig defaultConfig = new ModConfig();
+
             if (loaded == null) {
-                loaded = new ModConfig();
+                config = defaultConfig;
+            } else {
+                // 合并配置：保留旧配置的值，缺失的字段使用默认值
+                config = new ModConfig();
+                config.dropChance = loaded.dropChance;
+                config.preventBlockDamage = loaded.preventBlockDamage;
             }
 
-            loaded.dropChance = MathHelper.clamp(loaded.dropChance, 0.0D, 1.0D);
-            config = loaded;
+            // 确保值在合理范围内
+            config.dropChance = MathHelper.clamp(config.dropChance, 0.0D, 1.0D);
+
+            // 保存完整的配置（确保新字段被写入）
+            save();
         } catch (Exception e) {
             config = new ModConfig();
             try {
@@ -56,9 +68,5 @@ public final class ConfigManager {
 
     public static ModConfig get() {
         return config;
-    }
-
-    private static double clamp(double value, double min, double max) {
-        return Math.max(min, Math.min(max, value));
     }
 }

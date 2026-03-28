@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "CreeperBoom",
   "description": "When a player is killed by a charged creeper, they may drop their head.",
-  "icon": "assets/creeper/icon.png",
+  "icon": "assets/fabric/icon.png",
   "authors": ["BaiZhouziYou"],
   "contact": {},
   "license": "MIT",
@@ -17,5 +17,8 @@
     "fabricloader": ">=0.16.14",
     "minecraft": "1.21.4",
     "fabric-api": "*"
-  }
+  },
+  "mixins": [
+    "creeperboom.mixins.json"
+  ]
 }
