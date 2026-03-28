@@ -1,0 +1,13 @@
+# Gradle 产生的临时文件
+.gradle/
+build/
+
+# Minecraft 运行产生的测试存档和日志
+run/
+logs/
+
+# IDE（IntelliJ/Eclipse）配置文件
+.idea/
+*.iml
+*.ipr
+*.iws
