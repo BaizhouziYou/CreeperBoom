@@ -1,4 +1,5 @@
 [English](./README.md) | **简体中文**
+(简体中文文档可能更新不及时)
 # 🧨 CreeperBoom
 ![logo](icon.png)
 
