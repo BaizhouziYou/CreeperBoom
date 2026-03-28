@@ -1,3 +1,4 @@
+**English** | [简体中文](./README-zh_CN.md)
 # 🧨 CreeperBoom
 
 A lightweight Fabric mod that allows players to drop their own heads when killed by a Charged Creeper.
