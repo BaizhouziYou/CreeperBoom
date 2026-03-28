@@ -1,5 +1,6 @@
 [English](./README.md) | **简体中文**
 # 🧨 CreeperBoom
+![logo](icon.png)
 
 一款轻量化的 Fabric 模组。当玩家被高压苦力怕（Charged Creeper）炸死时，掉落其对应的玩家头颅。
 
