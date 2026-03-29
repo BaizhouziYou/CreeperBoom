@@ -3,7 +3,7 @@
 # 🧨 CreeperBoom
 ![logo](icon.png)
 
-一款轻量化的 Fabric 模组。当玩家被高压苦力怕（Charged Creeper）炸死时，掉落其对应的玩家头颅。
+一款轻量化的 Fabric 模组。当玩家被高压苦力怕（Charged Creeper）炸死时，掉落其对应的玩家头颅。(现在它可以控制苦力怕的爆炸行为了)
 
 ![Minecraft Version](https://img.shields.io/badge/Minecraft-1.21.4-blue?style=flat-square)
 ![Loader](https://img.shields.io/badge/Loader-Fabric-orange?style=flat-square)
@@ -18,7 +18,7 @@
 **CreeperBoom** 解决了这个问题：当玩家被高压苦力怕击杀时，会原地掉落一个带有该玩家皮肤纹理的头颅。
 
 ### 🌟 为什么写这个 Mod？
-因为我翻遍了社区，也没找到一个实现“高压苦力怕炸掉头”这一件事的模组，所以只能自己写了。
+因为我翻遍了社区，也没找到一个在1.21.4实现“高压苦力怕击败玩家掉落玩家头颅”和“苦力怕防爆”的模组，所以只能自己写了。
 
 ---
 
@@ -28,13 +28,17 @@
 
 ```json
 {
-  "dropChance": 1.0
+  "dropChance": 1.0,
+  "preventBlockDamage": true
 }
 ```
 
 - **dropChance**: 掉落概率。
-- **取值范围**: `0.1` - `1.0` (对应 10%-100%)。
-- **默认值**: `1.0` (100% 掉落)。
+  - **取值范围**: `0.1` - `1.0` (对应 10%-100%)。
+  - **默认值**: `1.0` (100% 掉落)。
+- **preventBlockDamage**: 防爆开关
+  - **范围**: `true` 或 `fasle`.
+  - **默认值**: `true`.
 
 ---
 
@@ -49,4 +53,4 @@
 - **GitHub**: 直接在仓库提交 Issues。
 
 ## 🧠 预计更新计划
-添加防止苦力怕爆炸破坏方块的功能
+~~添加防止苦力怕爆炸破坏方块的功能~~(已在v1.1完成)
