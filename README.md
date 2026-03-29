@@ -36,9 +36,9 @@ After the first run, the mod will generate a configuration file named `creeper.j
 - **dropChance**: The probability of the head dropping.
   - **Range**: `0.1` - `1.0` (corresponds to 10% - 100%).
   - **Default**: `1.0` (100% drop rate).
-- **preventBlockDamage**: The probability of the head dropping.
+- **preventBlockDamage**: Prevent Creeper explosions from destroying blocks.
   - **Range**: `true` or `fasle`.
-  - **Default**: `true` (prevent Creeper explosions from destroying blocks).
+  - **Default**: `true` .
 
 ---
 
