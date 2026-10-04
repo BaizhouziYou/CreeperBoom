@@ -3,7 +3,7 @@ package org.bzzy.creeper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 
 import java.io.IOException;
@@ -46,7 +46,7 @@ public final class ConfigManager {
             }
 
             // 确保值在合理范围内
-            config.dropChance = MathHelper.clamp(config.dropChance, 0.0D, 1.0D);
+            config.dropChance = Mth.clamp(config.dropChance, 0.0D, 1.0D);
 
             // 保存完整的配置（确保新字段被写入）
             save();

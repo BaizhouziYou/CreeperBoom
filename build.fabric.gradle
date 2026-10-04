@@ -1,0 +1,70 @@
+plugins {
+    id 'maven-publish'
+}
+
+def unobfuscated = stonecutter.eval(stonecutter.current.version, '>=26.1')
+apply plugin: unobfuscated ? 'net.fabricmc.fabric-loom' : 'net.fabricmc.fabric-loom-remap'
+
+version = "${project.mod_version}+mc${project.minecraft_version}-fabric"
+group = project.maven_group
+def requiredJava = project.java_version.toInteger()
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://maven.fabricmc.net/'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    if (!unobfuscated) {
+        mappings loom.officialMojangMappings()
+    }
+    def modConfiguration = unobfuscated ? 'implementation' : 'modImplementation'
+    add(modConfiguration, "net.fabricmc:fabric-loader:${project.loader_version}")
+    add(modConfiguration, "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+}
+
+processResources {
+    def metadata = [
+        version: project.version,
+        minecraft_version: project.minecraft_version,
+        loader_version: project.loader_version,
+        java_version: requiredJava
+    ]
+    inputs.properties metadata
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand metadata
+    }
+    filesMatching("creeperboom.mixins.json") {
+        expand metadata
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release.set(requiredJava)
+}
+
+java {
+    withSourcesJar()
+    toolchain.languageVersion = JavaLanguageVersion.of(requiredJava)
+    sourceCompatibility = JavaVersion.toVersion(requiredJava)
+    targetCompatibility = JavaVersion.toVersion(requiredJava)
+}
+
+tasks.register('buildAndCollect', Copy) {
+    group = 'build'
+    description = 'Build this target and collect its release and source jars in the root build/libs directory.'
+    dependsOn tasks.named('build')
+    from(tasks.named(unobfuscated ? 'jar' : 'remapJar'),
+         tasks.named(unobfuscated ? 'sourcesJar' : 'remapSourcesJar'))
+    into rootProject.layout.buildDirectory.dir('libs')
+}

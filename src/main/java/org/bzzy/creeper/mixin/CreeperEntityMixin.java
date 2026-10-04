@@ -1,26 +1,26 @@
 package org.bzzy.creeper.mixin;
 
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.level.Level;
 import org.bzzy.creeper.ConfigManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-@Mixin(CreeperEntity.class)
+@Mixin(Creeper.class)
 public class CreeperEntityMixin {
 
     @ModifyArg(
-            method = "explode",
+            method = "explodeCreeper",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/server/world/ServerWorld;createExplosion(Lnet/minecraft/entity/Entity;DDDFLnet/minecraft/world/World$ExplosionSourceType;)V"
+                    target = "Lnet/minecraft/server/level/ServerLevel;explode(Lnet/minecraft/world/entity/Entity;DDDFLnet/minecraft/world/level/Level$ExplosionInteraction;)V"
             ),
             index = 5
     )
-    private World.ExplosionSourceType modifyExplosionType(World.ExplosionSourceType originalType) {
+    private Level.ExplosionInteraction modifyExplosionType(Level.ExplosionInteraction originalType) {
         if (ConfigManager.get().preventBlockDamage) {
-            return World.ExplosionSourceType.NONE;
+            return Level.ExplosionInteraction.NONE;
         }
         return originalType;
     }

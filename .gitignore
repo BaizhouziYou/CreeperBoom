@@ -1,6 +1,8 @@
 # Gradle 产生的临时文件
 .gradle/
 build/
+.stonecutter/
+versions/*/src/
 
 # Minecraft 运行产生的测试存档和日志
 run/

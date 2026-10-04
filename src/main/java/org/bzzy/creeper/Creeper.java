@@ -2,16 +2,15 @@ package org.bzzy.creeper;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ProfileComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,7 @@ public class Creeper implements ModInitializer {
         ConfigManager.load();
 
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
-            if (!(entity instanceof ServerPlayerEntity player)) {
+            if (!(entity instanceof ServerPlayer player)) {
                 return;
             }
 
@@ -41,25 +40,27 @@ public class Creeper implements ModInitializer {
     }
 
     private static boolean isKilledByChargedCreeper(DamageSource damageSource) {
-        Entity attacker = damageSource.getAttacker();
-        if (attacker instanceof CreeperEntity creeper && creeper.isCharged()) {
+        Entity attacker = damageSource.getEntity();
+        if (attacker instanceof net.minecraft.world.entity.monster.Creeper creeper && creeper.isPowered()) {
             return true;
         }
 
-        Entity source = damageSource.getSource();
-        return source instanceof CreeperEntity creeper && creeper.isCharged();
+        Entity source = damageSource.getDirectEntity();
+        return source instanceof net.minecraft.world.entity.monster.Creeper creeper && creeper.isPowered();
     }
 
-    private static void dropPlayerHead(ServerPlayerEntity player) {
-        if (!(player.getWorld() instanceof ServerWorld world)) {
-            return;
-        }
+    private static void dropPlayerHead(ServerPlayer player) {
+        ServerLevel world = (ServerLevel) player.level();
 
         ItemStack head = new ItemStack(Items.PLAYER_HEAD);
 
         head.set(
-                DataComponentTypes.PROFILE,
-                new ProfileComponent(player.getGameProfile())
+                DataComponents.PROFILE,
+                //? >=1.21.11 {
+                /*ResolvableProfile.createResolved(player.getGameProfile())
+                *///?} else {
+                new ResolvableProfile(player.getGameProfile())
+                //?}
         );
 
         ItemEntity itemEntity = new ItemEntity(
@@ -70,6 +71,6 @@ public class Creeper implements ModInitializer {
                 head
         );
 
-        world.spawnEntity(itemEntity);
+        world.addFreshEntity(itemEntity);
     }
 }
